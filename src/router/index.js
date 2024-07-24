@@ -1,25 +1,34 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import store from '../store'; // Asegúrate de importar tu tienda Vuex
+import Home from '../views/Home.vue';
+import Login from '../views/Login.vue';
+import Register from '../views/Register.vue';
+import RecreationReservations from '../views/RecreationReservations.vue';
+import WorkReservations from '../views/WorkReservations.vue';
 
+// Definición de las rutas
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
-]
+  { path: '/', component: Home, meta: { requiresAuth: true } },
+  { path: '/login', component: Login },
+  { path: '/register', component: Register },
+  { path: '/recreation-reservations', component: RecreationReservations, meta: { requiresAuth: true } },
+  { path: '/work-reservations', component: WorkReservations, meta: { requiresAuth: true } },
+];
 
+// Creación del router
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
-})
+});
 
-export default router
+// Guard para verificar la autenticación antes de cada cambio de ruta
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = store.getters.isAuthenticated;
+  if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
+    next('/login');
+  } else {
+    next();
+  }
+});
+
+export default router;

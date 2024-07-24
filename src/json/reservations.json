@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "name": "Reserva de Trabajo 1",
+        "date": "2024-07-24",
+        "type": "work"
+    },
+    {
+        "id": 2,
+        "name": "Reserva Recreativa 1",
+        "date": "2024-07-25",
+        "type": "recreation"
+    }
+]
